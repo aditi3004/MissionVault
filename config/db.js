@@ -6,7 +6,7 @@ const db = mysql.createConnection({
   host: "localhost",
   user: "root",
   password: "aditi10387!@#", // replace with your actual MySQL password
-  database: "missionvault_db",
+  database: "missionvault_insecure",
 });
 
 db.connect((err) => {

@@ -2,7 +2,30 @@ const express = require("express");
 const db = require("../config/db");
 const router = express.Router();
 
-// Get all personnel records
+// === LOGIN FUNCTIONALITY ===
+router.post("/login", (req, res) => {
+  const { username, password } = req.body;
+
+  if (!username || !password) {
+    return res.status(400).json({ error: "Username and password required." });
+  }
+
+  const sql = "SELECT * FROM users WHERE username = ? AND password = ?";
+  db.execute(sql, [username, password], (err, results) => {
+    if (err) {
+      console.error("Login error:", err);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+
+    if (results.length === 0) {
+      return res.status(401).json({ error: "Invalid username or password" });
+    }
+
+    res.json({ success: true, message: "Login successful", user: results[0] });
+  });
+});
+
+// === CRUD: GET ALL PERSONNEL ===
 router.get("/records", (req, res) => {
   const sql = "SELECT * FROM personnel";
   db.query(sql, (err, results) => {
@@ -11,7 +34,7 @@ router.get("/records", (req, res) => {
   });
 });
 
-// Add a new personnel record
+// === ADD NEW PERSONNEL ===
 router.post("/records", (req, res) => {
   const {
     name,
@@ -36,11 +59,9 @@ router.post("/records", (req, res) => {
       service_number,
     ].includes(undefined)
   ) {
-    return res
-      .status(400)
-      .json({
-        error: "All fields must be provided. No undefined values allowed.",
-      });
+    return res.status(400).json({
+      error: "All fields must be provided. No undefined values allowed.",
+    });
   }
 
   const sql = `
@@ -70,7 +91,7 @@ router.post("/records", (req, res) => {
   });
 });
 
-// Update a personnel record
+// === UPDATE PERSONNEL ===
 router.put("/records/:personnel_id", (req, res) => {
   const {
     name,
@@ -108,7 +129,7 @@ router.put("/records/:personnel_id", (req, res) => {
   });
 });
 
-// Delete a personnel record
+// === DELETE PERSONNEL ===
 router.delete("/records/:personnel_id", (req, res) => {
   const sql = "DELETE FROM personnel WHERE personnel_id=?";
   db.execute(sql, [req.params.personnel_id], (err) => {
