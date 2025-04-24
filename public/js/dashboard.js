@@ -1,7 +1,6 @@
 const tabButtons = document.querySelectorAll(".tab-btn");
 const tabSections = document.querySelectorAll(".tab-section");
 
-// Tab Switching
 tabButtons.forEach((btn) => {
   btn.addEventListener("click", () => {
     const target = btn.getAttribute("data-tab");
@@ -10,16 +9,12 @@ tabButtons.forEach((btn) => {
       section.classList.add("hidden");
       if (section.getAttribute("data-tab") === target) {
         section.classList.remove("hidden");
-
-        if (target === "view") {
-          fetchPersonnelRecords();
-        }
+        if (target === "view") fetchPersonnelRecords();
       }
     });
   });
 });
 
-// Fetch all personnel records
 async function fetchPersonnelRecords() {
   try {
     const res = await fetch("/api/records");
@@ -31,14 +26,14 @@ async function fetchPersonnelRecords() {
     data.forEach((person) => {
       const row = `
         <tr>
-          <td class="p-2 border bg-gray-800 text-[#2d3625] min-w-[150px]">${person.name}</td>
-          <td class="p-2 border bg-gray-800 text-[#2d3625] min-w-[150px]">${person.role}</td>
-          <td class="p-2 border bg-gray-800 text-[#2d3625] min-w-[150px]">${person.ranking}</td>
-          <td class="p-2 border bg-gray-800 text-[#2d3625] min-w-[150px]">${person.email}</td>
-          <td class="p-2 border bg-gray-800 text-[#2d3625] min-w-[150px]">${person.aadhaar_number}</td>
-          <td class="p-2 border bg-gray-800 text-[#2d3625] min-w-[150px]">${person.pan_number}</td>
-          <td class="p-2 border bg-gray-800 text-[#2d3625] min-w-[150px]">${person.dob}</td>
-          <td class="p-2 border bg-gray-800 text-[#2d3625] min-w-[150px]">${person.service_number}</td>
+          <td class="p-2 border">${person.name}</td>
+          <td class="p-2 border">${person.role}</td>
+          <td class="p-2 border">${person.ranking}</td>
+          <td class="p-2 border">${person.email}</td>
+          <td class="p-2 border">${person.aadhaar_number}</td>
+          <td class="p-2 border">${person.pan_number}</td>
+          <td class="p-2 border">${person.dob}</td>
+          <td class="p-2 border">${person.service_number}</td>
         </tr>
       `;
       tbody.innerHTML += row;
@@ -48,12 +43,10 @@ async function fetchPersonnelRecords() {
   }
 }
 
-// Add Record
 document
   .getElementById("add-record-form")
   .addEventListener("submit", async (e) => {
     e.preventDefault();
-
     const newRecord = {
       name: document.getElementById("name").value,
       role: document.getElementById("role").value,
@@ -83,3 +76,10 @@ document
       console.error("Error:", err);
     }
   });
+
+// 🚨 XSS Demo Handler
+document.getElementById("xss-form").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const userInput = document.getElementById("xss-input").value;
+  document.getElementById("xss-output").innerHTML = userInput;
+});
