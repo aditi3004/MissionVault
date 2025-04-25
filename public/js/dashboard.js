@@ -78,8 +78,29 @@ document
   });
 
 // 🚨 XSS Demo Handler
-document.getElementById("xss-form").addEventListener("submit", (e) => {
+// document.getElementById("xss-form").addEventListener("submit", (e) => {
+//   e.preventDefault();
+//   const userInput = document.getElementById("xss-input").value;
+//   document.getElementById("xss-output").innerHTML = userInput;
+// });
+
+document.getElementById("xss-form").addEventListener("submit", function (e) {
   e.preventDefault();
-  const userInput = document.getElementById("xss-input").value;
-  document.getElementById("xss-output").innerHTML = userInput;
+
+  const input = document.getElementById("xss-input").value;
+
+  // ❗️VULNERABLE CODE: Injects raw HTML into the DOM (this is where the XSS happens)
+  document.getElementById("xss-output").innerHTML = input;
 });
+
+// Reflected XSS (simulated)
+document
+  .getElementById("reflected-xss-form")
+  .addEventListener("submit", function (e) {
+    e.preventDefault();
+    const input = document.getElementById("reflected-xss-input").value;
+    const output = document.getElementById("reflected-xss-output");
+
+    // 🔥 Directly injecting user input (VULNERABLE)
+    output.innerHTML = `<p>You searched for: ${input}</p>`;
+  });

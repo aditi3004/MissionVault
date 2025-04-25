@@ -185,6 +185,26 @@
             id="xss-output"
             class="mt-4 border p-4 bg-gray-900 text-white"
           ></div>
+          <hr class="my-4 border-yellow-500" />
+          <h2 class="text-yellow-300 text-xl font-bold">Reflected XSS Demo</h2>
+          <form id="reflected-xss-form" class="space-y-4 mt-2">
+            <input
+              id="reflected-xss-input"
+              type="text"
+              placeholder="Type a search query"
+              class="p-2 border w-full"
+            />
+            <button type="submit" class="bg-green-600 text-white p-2 rounded">
+              Search
+            </button>
+          </form>
+
+          <div
+            id="reflected-xss-output"
+            class="mt-4 text-white bg-gray-800 p-4 border"
+          >
+            <!-- Reflected content will appear here -->
+          </div>
         </div>
       </div>
     </div>
